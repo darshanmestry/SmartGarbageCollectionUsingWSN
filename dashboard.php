@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>Admin Dashboard</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="assets/css/demo.css" rel="stylesheet" />
+
+
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+
+	
+	
+	
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+     
+	   $.getJSON('http://api.thingspeak.com/channels/79448/feed/last.json?callback=?', function(data){
+           
+                
+				data1=data.field1;
+           
+        });
+		
+		 google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+	  
+    
+      function drawChart() {
+ data1=eval(data1);
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Filled',     data1],
+          ['Empty',      100 - data1]
+          
+        ]);
+
+        var options = {
+          title: 'TrashBin Level'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+	<?php
+    error_reporting(0);
+$username="reshma.1866@gmail.com";
+$hash = "75378419535e999c2fc609630302fb6808db6997";
+
+$url="http://api.thingspeak.com/channels/79448/feed/last.json";
+
+    $json = file_get_contents($url);
+    $data1 = json_decode($json, TRUE);
+
+   
+
+$numbers=917276575869;
+$sender = urlencode('TXTLCL');
+$message="TrashBin_ID:1 capacity: $data1" ;
+
+$data = array('username' => $username, 'hash' => $hash, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+
+if($_POST['submitted']=="true")
+{
+    $ch = curl_init('http://api.textlocal.in/send/');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        // Process your response here
+        echo $response;
+      
+    
+}
+
+?>
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</head>
+<body>
+    <style type="text/css">
+         #chart {
+            position: relative;
+            float: left;
+            margin-right: 300px;
+            margin-bottom: 300px;
+    }
+        
+    
+p.one {
+   
+    padding-left: 80px;
+}
+</style>
+
+
+<div class="wrapper">
+    <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
+
+    <!--
+
+        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+        Tip 2: you can also add an image using data-image tag
+
+    -->
+
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="dashboard.php" class="simple-text">
+                    Home
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li class="active">
+                    <a href="dashboard.php">
+                        <i class="pe-7s-graph"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="user.php">
+                        <i class="pe-7s-user"></i>
+                        <p>Admin Profile</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="table.php">
+                        <i class="pe-7s-note2"></i>
+                        <p>Driver List</p>
+                    </a>
+                </li>
+				 <li >
+                    <a href="maps.html">
+                        <i class="pe-7s-map-marker"></i>
+                        <p>Maps</p>
+                    </a>
+                </li>
+                
+               
+                
+               
+            </ul>
+    	</div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" >
+                        <form action="dashboard.php"  method="POST">
+        
+        <input type="hidden" name="submitted" value="true">
+        <input type="submit" name="submit" value="Notify Driver">
+        
+                    </form>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse">
+                   
+
+                    <ul class="nav navbar-nav navbar-right">
+                        
+                        
+                        <li>
+                            <a href="SignIn.html">
+                                Log out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+		
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">TrashBin Statistics</h4>
+                                <p class="category">Last trashbin reading</p>
+                            </div>
+                            <div class="content">
+                             <!--  <div id="piechart" style="width: 500px; height: 400px;"></div> 	-->
+								<div id="piechart" style="width: 400px; height: 400px" >
+								
+								
+
+								</div>
+									
+
+                                <div class="footer">
+                                    
+                                    <hr   >
+                                    <div class="stats" >
+                                        <i class="fa fa-clock-o"></i> Updated  at 
+										
+									</div> <div id="demo" class="stats"> </div>
+									<script>     
+											$.getJSON('http://api.thingspeak.com/channels/79448/feed/last.json?callback=?', function(data){
+           
+											var  timestamp=data.created_at;
+				                          document.getElementById("demo").innerHTML = timestamp;
+										
+                                            });
+										</script>
+								
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
+					<div class="col-md-6">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">TrashBin Statistics</h4>
+                                <p class="category">All Trashbin Readings</p>
+                            </div>
+                            <div class="content">
+                                <div id="piechart" style="width: 400px; height: 400px">
+								<iframe width="450" height="250" style="border: 1px solid #cccccc;" src="http://thingspeak.com/channels/79448/charts/1"></iframe>
+								
+								</div>
+                                <div class="footer">
+                                    
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-history"></i> Last 4 days readings
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    
+
+
+
+                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
+
+    </div>
+</div>
+
+
+</body>
+
+    <!--   Core JS Files   -->
+    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Checkbox, Radio & Switch Plugins -->
+	<script src="assets/js/bootstrap-checkbox-radio-switch.js"></script>
+
+	<!--  Charts Plugin -->
+	<script src="assets/js/chartist.min.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/bootstrap-notify.js"></script>
+
+    <!--  Google Maps Plugin    -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+    <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+	<script src="assets/js/light-bootstrap-dashboard.js"></script>
+
+	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+	<script src="assets/js/demo.js"></script>
+
+	<script type="text/javascript">
+    	$(document).ready(function(){
+
+        	demo.initChartist();
+
+        	$.notify({
+            	
+            	message: '<?php  
+							if($data2['status']=='failure')	
+							{
+								echo "Message send failure";
+							}
+							else
+							{
+								echo "Message send success ";
+							}
+							?>'
+
+            },{
+                type: 'info',
+                timer: 4000
+            });
+
+    	});
+	</script>
+	
+	
+
+</html>
